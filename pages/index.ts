@@ -1,0 +1,16 @@
+export { AdminPage } from './admin.page';
+export { AvailabilityPage } from './availability.page';
+export { BirthdaysPage } from './birthdays.page';
+export { CalendarPage } from './calendar.page';
+export { CommunitiesNewPage } from './communities-new.page';
+export { CommunitiesPage } from './communities.page';
+export { CommunityDetailPage } from './community-detail.page';
+export { DashboardPage } from './dashboard.page';
+export { ForgotPasswordPage } from './forgot-password.page';
+export { FriendsPage } from './friends.page';
+export { LandingPage } from './landing.page';
+export { LoginPage } from './login.page';
+export { PlaydatesNewPage } from './playdates-new.page';
+export { PlaydatesPage } from './playdates.page';
+export { ProfilePage } from './profile.page';
+export { SignupPage } from './signup.page';
