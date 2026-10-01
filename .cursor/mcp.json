@@ -1,9 +1,8 @@
 {
   "mcpServers": {
     "Playwright": {
-      "command": "npx @playwright/mcp@latest",
-      "env": {},
-      "args": []
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
     },
     "github": {
       "url": "https://api.githubcopilot.com/mcp/",
