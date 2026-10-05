@@ -40,9 +40,10 @@ Non-negotiables for every task. Details and examples: playwright-conventions.mdc
 
 ## Index
 
-Skills (`.agents/skills/`) and Agents (`.cursor/agents/`): leave both lists empty with the note "updated as each artifact is added".
+Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as each artifact is added.
 
-- Skills: *(empty — updated as each artifact is added)*
+- Skills:
+  - `jira-ticket-analyzer` — Jira acceptance criteria → reviewable Gherkin in `features/<ticket-key>.feature.md`
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance
