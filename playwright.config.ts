@@ -6,10 +6,15 @@ dotenv.config();
 
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './support/global-setup.ts',
+  globalTeardown: './support/global-teardown.ts',
   timeout: 30000,
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  reporter: [['html', { open: 'never' }]],
+  reporter: [
+    ['./support/cleanup-reporter.ts'],
+    ['html', { open: 'never' }],
+  ],
   use: {
     baseURL: process.env.APP_URL,
     headless: true,
