@@ -1,4 +1,7 @@
-import type { SignupAccountPayload } from './factories/signup-account.factory';
+import {
+  SIGNUP_PASSWORD_MIN_LENGTH,
+  type SignupAccountPayload,
+} from './factories/signup-account.factory';
 
 /** Valid filler when the AC only constrains the email or password under test (AC16–AC20). */
 export const invalidSignupValidFiller = {
@@ -24,7 +27,7 @@ export const invalidSignupFieldSets = {
   passwordTooShort: {
     name: 'Rena Signup',
     email: 'valid-signup@example.test',
-    password: '1234567',
+    password: '1'.repeat(SIGNUP_PASSWORD_MIN_LENGTH - 1),
   },
   /** AC16: Email `missing-at.com` — missing `@` validation message. */
   emailMissingAtInDomain: {
@@ -89,8 +92,15 @@ export const invalidSignupPasswordValidationMessage =
 /** AC21: Empty required field validation message on **Your name**. */
 export const invalidSignupRequiredFieldMessage = 'Please fill out this field.' as const;
 
+/** AC2: 18+ copy in the sign-up `main` region. */
+export const signupGuardiansNoticeCopy =
+  'BuddyTime is for parents and guardians (18+).' as const;
+
 /** AC9 / AC22: Duplicate email inline error. */
 export const duplicateSignupAccountError = 'An account with this email already exists' as const;
+
+/** Confluence: name of only spaces does not trigger the required-field message on Your name. */
+export const invalidSignupSpacesOnlyName = '     ' as const;
 
 /**
  * AC9 / AC22: Already-registered email uses `process.env.APP_USER_EMAIL` (Family A) in tests —

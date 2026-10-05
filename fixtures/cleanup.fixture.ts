@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect, type Page } from '@playwright/test';
 import { API_AUTH_REGISTER } from '../support/api.constants';
 import {
   parseRegisterRequestPassword,
@@ -54,31 +54,39 @@ async function handleRegisterResponse(
   }
 }
 
+/** Tracks successful register responses on a page for global teardown. Returns a flush function. */
+export function attachRegisterResponseTracking(page: Page): () => Promise<void> {
+  const pending: Promise<void>[] = [];
+  page.on('response', (response) => {
+    pending.push(
+      (async () => {
+        const request = response.request();
+        if (request.method() !== 'POST') {
+          return;
+        }
+        const url = response.url();
+        if (!registerPathMatches(url)) {
+          return;
+        }
+        let responseBody: unknown;
+        try {
+          responseBody = await response.json();
+        } catch {
+          return;
+        }
+        await handleRegisterResponse(url, response.status(), request.postData(), responseBody);
+      })(),
+    );
+  });
+  return async () => {
+    await Promise.all(pending);
+  };
+}
+
 export const test = base.extend({
   page: async ({ page }, use) => {
-    const pending: Promise<void>[] = [];
-    page.on('response', (response) => {
-      pending.push(
-        (async () => {
-          const request = response.request();
-          if (request.method() !== 'POST') {
-            return;
-          }
-          const url = response.url();
-          if (!registerPathMatches(url)) {
-            return;
-          }
-          let responseBody: unknown;
-          try {
-            responseBody = await response.json();
-          } catch {
-            return;
-          }
-          await handleRegisterResponse(url, response.status(), request.postData(), responseBody);
-        })(),
-      );
-    });
+    const flush = attachRegisterResponseTracking(page);
     await use(page);
-    await Promise.all(pending);
+    await flush();
   },
 });
