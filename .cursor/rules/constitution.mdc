@@ -46,6 +46,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `jira-ticket-analyzer` — Jira acceptance criteria → reviewable Gherkin in `features/<ticket-key>.feature.md`
   - `jira-bug-reporter` — Playwright failure triage → reviewable Jira bug; file after human approval
   - `api-cleanup` — track created records; global teardown via `api-client` / P10 UI fallback
+  - `pom-conventions` — BuddyTime POM layout, page inventory, no inline locators in specs
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance
