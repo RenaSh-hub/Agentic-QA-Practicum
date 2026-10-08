@@ -44,6 +44,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
 
 - Skills:
   - `jira-ticket-analyzer` — Jira acceptance criteria → reviewable Gherkin in `features/<ticket-key>.feature.md`
+  - `jira-bug-reporter` — Playwright failure triage → reviewable Jira bug; file after human approval
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance
