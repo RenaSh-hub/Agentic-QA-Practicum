@@ -43,15 +43,16 @@ Non-negotiables for every task. Details and examples: playwright-conventions.mdc
 Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as each artifact is added.
 
 - Skills:
-  - `jira-ticket-analyzer` — Jira acceptance criteria → reviewable Gherkin in `features/<ticket-key>.feature.md`
-  - `jira-bug-reporter` — Playwright failure triage → reviewable Jira bug; file after human approval
   - `api-cleanup` — track created records; global teardown via `api-client` / P10 UI fallback
-  - `pom-conventions` — BuddyTime POM layout, page inventory, no inline locators in specs
   - `ci-failure-triage` — red CI run → logs, Playwright report/trace, classify drift vs bug, PR diagnosis
-  - `explore-and-generate` — ticket-less UI crawl vs specs → one gap, Gherkin in `features/explore-*.feature.md`
-  - `self-heal` — drifted locator → minimal POM patch, unchanged assertions, PR on `heal/*`; after triage only
-  - `exploratory-charter` — feature + risk → session charter and blank findings in `charters/<feature-slug>.md`; format only
   - `eval-report` — refresh eval-report.md from CI/PR/transcripts; flake, heal, generation-gate, ask-vs-guess
+  - `exploratory-charter` — feature + risk → session charter and blank findings in `charters/<feature-slug>.md`; format only
+  - `explore-and-generate` — ticket-less UI crawl vs specs → one gap, Gherkin in `features/explore-*.feature.md`
+  - `jira-bug-reporter` — Playwright failure triage → reviewable Jira bug; file after human approval
+  - `jira-ticket-analyzer` — Jira acceptance criteria → reviewable Gherkin in `features/<ticket-key>.feature.md`
+  - `pom-conventions` — BuddyTime POM layout, page inventory, no inline locators in specs
+  - `self-heal` — drifted locator → minimal POM patch, unchanged assertions, PR on `heal/*`; after triage only
+  - `test-data-reset` — manual delete of tracker rows via `reset-test-data.ts`; explicit user request only
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance

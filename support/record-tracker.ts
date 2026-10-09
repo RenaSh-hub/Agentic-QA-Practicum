@@ -72,6 +72,16 @@ export function resetTracker(): void {
   writeFileSync(TRACKER_PATH, '', 'utf8');
 }
 
+/** Replaces tracker contents (e.g. after partial cleanup by type). */
+export function replaceTrackedRecords(records: TrackedRecord[]): void {
+  mkdirSync(trackerDir(), { recursive: true });
+  if (records.length === 0) {
+    writeFileSync(TRACKER_PATH, '', 'utf8');
+    return;
+  }
+  writeFileSync(TRACKER_PATH, `${records.map((r) => JSON.stringify(r)).join('\n')}\n`, 'utf8');
+}
+
 function isEnoent(error: unknown): boolean {
   return (
     typeof error === 'object' &&
