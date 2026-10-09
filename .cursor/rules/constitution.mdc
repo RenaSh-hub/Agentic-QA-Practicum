@@ -51,6 +51,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `explore-and-generate` — ticket-less UI crawl vs specs → one gap, Gherkin in `features/explore-*.feature.md`
   - `self-heal` — drifted locator → minimal POM patch, unchanged assertions, PR on `heal/*`; after triage only
   - `exploratory-charter` — feature + risk → session charter and blank findings in `charters/<feature-slug>.md`; format only
+  - `eval-report` — refresh eval-report.md from CI/PR/transcripts; flake, heal, generation-gate, ask-vs-guess
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance
