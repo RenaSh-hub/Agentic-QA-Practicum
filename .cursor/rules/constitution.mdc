@@ -49,6 +49,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `pom-conventions` — BuddyTime POM layout, page inventory, no inline locators in specs
   - `ci-failure-triage` — red CI run → logs, Playwright report/trace, classify drift vs bug, PR diagnosis
   - `explore-and-generate` — ticket-less UI crawl vs specs → one gap, Gherkin in `features/explore-*.feature.md`
+  - `self-heal` — drifted locator → minimal POM patch, unchanged assertions, PR on `heal/*`; after triage only
 - Agents: *(empty — updated as each artifact is added)*
 
 ## Agent governance
