@@ -53,7 +53,8 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `pom-conventions` — BuddyTime POM layout, page inventory, no inline locators in specs
   - `self-heal` — drifted locator → minimal POM patch, unchanged assertions, PR on `heal/*`; after triage only
   - `test-data-reset` — manual delete of tracker rows via `reset-test-data.ts`; explicit user request only
-- Agents: *(empty — updated as each artifact is added)*
+- Agents:
+  - `test-writer` — test plan (Gherkin) → Playwright spec + POM actions under `tests/` / `pages/`; run once before reporting success
 
 ## Agent governance
 
