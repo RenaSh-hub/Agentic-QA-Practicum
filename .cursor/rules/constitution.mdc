@@ -55,6 +55,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `test-data-reset` — manual delete of tracker rows via `reset-test-data.ts`; explicit user request only
 - Agents:
   - `test-writer` — test plan (Gherkin) → Playwright spec + POM actions under `tests/` / `pages/`; run once before reporting success
+  - `triage` — red CI or local failure → ci-failure-triage diagnosis + one classification; read-only, hand off to parent
 
 ## Agent governance
 
