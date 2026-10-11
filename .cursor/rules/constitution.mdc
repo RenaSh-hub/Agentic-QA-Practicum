@@ -56,6 +56,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
 - Agents:
   - `test-writer` — test plan (Gherkin) → Playwright spec + POM actions under `tests/` / `pages/`; run once before reporting success
   - `triage` — red CI or local failure → ci-failure-triage diagnosis + one classification; read-only, hand off to parent
+  - `bug-reporter` — confirmed real app bug → jira-bug-reporter draft; file in AQPBT after human approval; no repo edits
 
 ## Agent governance
 
