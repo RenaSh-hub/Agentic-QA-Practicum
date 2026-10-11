@@ -18,10 +18,14 @@ export class HeaderComponent {
   readonly menu: Locator;
   readonly notifications: Locator;
   readonly logOut: Locator;
+  readonly dashboardTitle: Locator;
+  readonly friendsTitle: Locator;
 
   constructor(page: Page) {
     this.navigation = page.getByRole('navigation');
     this.banner = page.getByRole('banner');
+    this.dashboardTitle = this.banner.getByText('Dashboard', { exact: true });
+    this.friendsTitle = this.banner.getByText('Friends', { exact: true });
     this.dashboard = this.navigation.getByRole('link', { name: 'Dashboard', exact: true });
     this.calendar = this.navigation.getByRole('link', { name: 'Calendar', exact: true });
     this.friends = this.navigation.getByRole('link', { name: 'Friends', exact: true });
