@@ -9,6 +9,9 @@ export class LoginPage {
   readonly logInButton: Locator;
   readonly signUp: Locator;
   readonly forgotPassword: Locator;
+  readonly invalidCredentialsError: Locator;
+  readonly buddyTime: Locator;
+  readonly newToBuddyTime: Locator;
 
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'Welcome back', exact: true });
@@ -17,11 +20,19 @@ export class LoginPage {
     this.logInButton = page.getByRole('button', { name: 'Log in', exact: true });
     this.signUp = page.getByRole('link', { name: 'Sign up', exact: true });
     this.forgotPassword = page.getByRole('link', { name: 'Forgot password?', exact: true });
+    this.invalidCredentialsError = page.getByText('Invalid email or password', { exact: true });
+    this.buddyTime = page.getByText('BuddyTime', { exact: true });
+    this.newToBuddyTime = page.getByText('New to BuddyTime?');
   }
 
   /** Opens the log-in page. */
   async goto(): Promise<void> {
     await this.page.goto(AppRoute.Login);
+  }
+
+  /** Opens log-in with a `next` query parameter (e.g. `%2Ffriends`). */
+  async gotoWithNext(encodedNext: string): Promise<void> {
+    await this.page.goto(`${AppRoute.Login}?next=${encodedNext}`);
   }
 
   /** Fills the email. */
