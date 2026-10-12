@@ -5,13 +5,13 @@ import { AppRoute } from '../test-data/routes';
 export class ForgotPasswordPage {
   readonly heading: Locator;
   readonly email: Locator;
-  readonly sendResetLink: Locator;
+  readonly forgotPassword: Locator;
   readonly backToLogIn: Locator;
 
   constructor(private readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'Reset your password', exact: true });
     this.email = page.getByRole('textbox', { name: 'Email', exact: true });
-    this.sendResetLink = page.getByRole('button', { name: 'Send reset link', exact: true });
+    this.forgotPassword = page.getByRole('button', { name: 'Send reset link', exact: true });
     this.backToLogIn = page.getByRole('link', { name: '← Back to log in', exact: true });
   }
 
@@ -27,7 +27,7 @@ export class ForgotPasswordPage {
 
   /** Submits the reset form. */
   async submit(): Promise<void> {
-    await this.sendResetLink.click();
+    await this.forgotPassword.click();
   }
 
   /** Returns to the log-in page. */
