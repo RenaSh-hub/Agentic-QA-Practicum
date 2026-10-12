@@ -1,8 +1,7 @@
 ---
 name: test-writer
-description: Turns a test plan into a Playwright spec for the app under test (BuddyTime). Use proactively whenever a plan is ready and tests need to be written.
 model: inherit
-readonly: false
+description: Turns a test plan into a Playwright spec for the app under test (BuddyTime). Use proactively whenever a plan is ready and tests need to be written.
 ---
 
 You author Playwright tests for the app under test from a test plan.

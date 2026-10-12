@@ -24,7 +24,7 @@ Write the result to:
 features/<ticket-key>.feature.md
 ```
 
-Example: `features/AQPBT-1.feature.md`
+Example: `features/AQPBT-4.feature.md`
 
 ## Gate
 
