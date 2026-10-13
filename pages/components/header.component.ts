@@ -21,6 +21,7 @@ export class HeaderComponent {
   readonly dashboardTitle: Locator;
   readonly friendsTitle: Locator;
   readonly calendarTitle: Locator;
+  readonly playdatesTitle: Locator;
 
   constructor(page: Page) {
     this.navigation = page.getByRole('navigation');
@@ -28,6 +29,7 @@ export class HeaderComponent {
     this.dashboardTitle = this.banner.getByText('Dashboard', { exact: true });
     this.friendsTitle = this.banner.getByText('Friends', { exact: true });
     this.calendarTitle = this.banner.getByText('Calendar', { exact: true });
+    this.playdatesTitle = this.banner.getByText('Playdates', { exact: true });
     this.dashboard = this.navigation.getByRole('link', { name: 'Dashboard', exact: true });
     this.calendar = this.navigation.getByRole('link', { name: 'Calendar', exact: true });
     this.friends = this.navigation.getByRole('link', { name: 'Friends', exact: true });
