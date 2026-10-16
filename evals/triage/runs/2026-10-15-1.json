@@ -1,0 +1,47 @@
+{
+  "model": "composer-2.5-fast",
+  "startedAt": "2026-10-16T02:58:00.000Z",
+  "finishedAt": "2026-10-16T03:05:00.000Z",
+  "predictions": [
+    {
+      "id": "fixture-min-act-drift",
+      "predicted": "drift",
+      "evidence": "Live scorer: act/drift score 60 rule 6; verified R1–R4, D1+D2 (snapshot_mismatch, pom_changed); allowedActions self-heal."
+    },
+    {
+      "id": "fixture-min-act-bug",
+      "predicted": "bug",
+      "evidence": "Live scorer: act/bug score 60 rule 6; verified R1,R2,R4,B1+B3 (ac_contradiction, control_present); allowedActions bug-reporter."
+    },
+    {
+      "id": "fixture-min-escalate",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: escalate/drift score 40 rule 7 — below act threshold; only D1 verified; per eval oracle policy escalate → ambiguous."
+    },
+    {
+      "id": "fixture-missing-required",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: inconclusive rule 2; missing required R4 rerun evidence."
+    },
+    {
+      "id": "fixture-contradiction",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: inconclusive rule 4; contradictions D1 vs B2 (drift and bug signals)."
+    },
+    {
+      "id": "fixture-neutral-oracle",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: escalate rule 7; oracle false with N + D2/D3 — not safe to act."
+    },
+    {
+      "id": "fixture-flaky",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: inconclusive rule 3; saved JSON re-run passed without product change."
+    },
+    {
+      "id": "fixture-model-score",
+      "predicted": "ambiguous",
+      "evidence": "Live scorer: inconclusive rule 1; evidence file contains forbidden confidence field."
+    }
+  ]
+}

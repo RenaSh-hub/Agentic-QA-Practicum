@@ -52,6 +52,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `jira-ticket-analyzer` — AC to Gherkin
   - `pom-conventions` — POM layout rules
   - `self-heal` — drift POM patch
+  - `score-agent` — answer-key agent accuracy
   - `test-data-reset` — manual tracker purge
 - Agents:
   - `bug-reporter` — file confirmed bugs

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "fixture-min-act-drift",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root (chroot for artifacts): scripts/evidence-fixtures/min-act-drift\nEvidence file: scripts/evidence-fixtures/min-act-drift/evidence.json\n\nSteps: read evidence items and referenced artifacts under the fixture root (failure.log, tests/calendar.spec.ts, pages/calendar.page.ts, rerun.txt). Cross-check features/AC if present in the fixture. After triage, run: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/min-act-drift/evidence.json --verify-only --root scripts/evidence-fixtures/min-act-drift\n\nReturn your classification (drift | bug | ambiguous) and brief evidence — do not read evals/triage/answer-key.json.",
+    "expected": "drift"
+  },
+  {
+    "id": "fixture-min-act-bug",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/min-act-bug\nEvidence file: scripts/evidence-fixtures/min-act-bug/evidence.json\n\nSteps: read evidence and artifacts (failure.log, tests/calendar.spec.ts, features/calendar.feature.md, snapshot.txt, rerun.txt). Compare app-visible behavior to the feature/AC text in the fixture. Scorer command: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/min-act-bug/evidence.json --verify-only --root scripts/evidence-fixtures/min-act-bug\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "bug"
+  },
+  {
+    "id": "fixture-min-escalate",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/min-escalate\nEvidence file: scripts/evidence-fixtures/min-escalate/evidence.json\n\nSteps: read evidence and artifacts under the fixture root. Note whether signals are strong enough to act vs need human review. Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/min-escalate/evidence.json --verify-only --root scripts/evidence-fixtures/min-escalate\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  },
+  {
+    "id": "fixture-missing-required",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/missing-required\nEvidence file: scripts/evidence-fixtures/missing-required/evidence.json\n\nSteps: read evidence and artifacts (failure.log, tests/calendar.spec.ts, pages/calendar.page.ts, probe.txt). Check whether required rerun/repro evidence is present. Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/missing-required/evidence.json --verify-only --root scripts/evidence-fixtures/missing-required\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  },
+  {
+    "id": "fixture-contradiction",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/contradiction\nEvidence file: scripts/evidence-fixtures/contradiction/evidence.json\n\nSteps: read evidence and artifacts (failure.log, server-error.log, spec, POM, rerun). Look for conflicting drift vs product-failure signals. Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/contradiction/evidence.json --verify-only --root scripts/evidence-fixtures/contradiction\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  },
+  {
+    "id": "fixture-neutral-oracle",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/neutral-oracle\nEvidence file: scripts/evidence-fixtures/neutral-oracle/evidence.json\n\nSteps: read evidence and artifacts (failure.log, locator-error.log, neutral.txt, spec, POM, rerun). Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/neutral-oracle/evidence.json --verify-only --root scripts/evidence-fixtures/neutral-oracle\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  },
+  {
+    "id": "fixture-flaky",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/flaky\nEvidence file: scripts/evidence-fixtures/flaky/evidence.json\n\nSteps: read evidence and artifacts; ensure the saved JSON re-run exists at scripts/evidence-fixtures/flaky/.test-artifacts/reruns/<decisionId>.json (copy flaky/rerun.json there; decisionId = first 12 hex chars of sha256 of evidence.json, same as scripts/score-evidence.test.ts prepareRerun). Determine whether failure is stable or passed on re-run without product change. Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/flaky/evidence.json --verify-only --root scripts/evidence-fixtures/flaky\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  },
+  {
+    "id": "fixture-model-score",
+    "input": "Classify this Playwright CI failure as drift, bug, or ambiguous.\n\nFixture root: scripts/evidence-fixtures/model-score\nEvidence file: scripts/evidence-fixtures/model-score/evidence.json\n\nSteps: triage using only valid evidence fields (artifact, line, excerpt). Scorer: npx tsx scripts/score-evidence.ts scripts/evidence-fixtures/model-score/evidence.json --verify-only --root scripts/evidence-fixtures/model-score\n\nReturn drift | bug | ambiguous with evidence. Do not read evals/triage/answer-key.json.",
+    "expected": "ambiguous"
+  }
+]

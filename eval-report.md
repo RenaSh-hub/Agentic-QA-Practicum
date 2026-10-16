@@ -53,3 +53,22 @@ PR **`pull_request`** runs **`@smoke` only**, while many AC scenarios are tagged
 ## Next action
 
 After PR #5 stabilizes, re-run this report with downloaded Playwright HTML artifacts for retry-level flake data and a reviewed ask-vs-guess sample.
+
+## Agent accuracy — triage
+
+**Date:** 2026-10-15  
+**Runs:** 3 (`evals/triage/runs/2026-10-15-1.json` … `-3.json`)  
+**Model:** `composer-2.5-fast`  
+**Cases:** 8 fixture scenarios (`scripts/evidence-fixtures/`)
+
+**How measured:** Each case used only the prompt in the answer-key `input` (agent did not read labels). Triage read fixture artifacts, ran live `score-evidence.ts --verify-only` with `--root` per fixture, and mapped results through the locked oracle policy in [`evals/README.md`](evals/README.md). Metrics from `npx tsx evals/score.ts triage` (pooled over 24 predictions).
+
+| Metric | Value |
+| --- | --- |
+| Overall accuracy | 100.0% |
+| Drift precision / recall | 100.0% / 100.0% (FP 0) |
+| Bug precision / recall | 100.0% / 100.0% (FP 0) |
+| Ambiguous precision / recall | 100.0% / 100.0% (FP 0) |
+| Run agreement | 100.0% (8/8 cases; all three runs agreed on every id) |
+
+**Interpretation:** Fixture-only bootstrap; scores reflect policy-aligned classification on curated evidence, not live CI diversity. Re-run after adding real red-run cases to the answer key.
