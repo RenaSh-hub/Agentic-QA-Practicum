@@ -7,6 +7,19 @@ description: Analyzes Playwright test failures, identifies root cause, and creat
 
 Turn a failing Playwright run into a reviewed Jira Bug linked to the originating story. BuddyTime application source is not available — describe observable UI/API behavior precisely from the test, trace, and live reproduction.
 
+## Prerequisite
+
+Re-run `npx tsx scripts/score-evidence.ts --verify-only .test-artifacts/evidence/current.json`. Trust that stdout only — not a saved decision file, not a triage label in chat.
+
+| Live scorer | Action |
+| --- | --- |
+| `act` and `side` `bug` | Draft, then file with `createJiraIssue` (`issueType`: `Bug`) after the human reviews the draft |
+| `escalate` and `.test-artifacts/approvals/<decisionId>.json` exists (human-created) | Same |
+| `act` and `side` `drift` | **Stop** — [self-heal](../self-heal/SKILL.md); do not file |
+| `inconclusive` or `escalate` without an approval file | **Stop** — do not file |
+
+The Atlassian create-issue field for type is `issueType`. In project AQPBT the bug type name is `Bug`.
+
 ## Workflow
 
 1. **Read the failure:** assertion message, stack trace, screenshot and trace paths under `test-results/`.
@@ -28,12 +41,11 @@ Turn a failing Playwright run into a reviewed Jira Bug linked to the originating
 
 ## Triage before filing
 
-| Outcome | Action |
+| Live scorer | Action |
 | -------- | ------ |
-| Product defect (app wrong vs AC) | Draft bug per workflow |
-| Test drift (selectors, timing, wrong expectation) | Fix or heal the test — do **not** file a Jira bug |
-| Flaky / env / credentials / data setup | Fix automation or env — do **not** file as product bug |
-| Re-run passes with no app change | Investigate flake; do **not** file on a single red without reproduction |
+| act + bug (or escalate + approval file) | Draft bug per workflow |
+| act + drift | Heal the test — do **not** file a Jira bug |
+| inconclusive because the re-run passed | Flake — do **not** file as a product bug |
 
 Constitution: triage first; never heal a real bug by weakening assertions.
 
@@ -86,7 +98,7 @@ Present this block to the human for approval:
 
 ## Gate
 
-Stop after presenting the draft unless the human explicitly approves filing. Only then create the Jira issue and confirm the key + link to the story.
+Stop after presenting the draft unless the live scorer allows filing (`act` + `bug`, or `escalate` plus a human approval file) **and** the human explicitly approves the draft text. Only then call `createJiraIssue` with `issueType` `Bug` and confirm the key + link to the story. The hook re-runs the scorer on that MCP call; do not file via a saved decision file.
 
 ## Repo context
 

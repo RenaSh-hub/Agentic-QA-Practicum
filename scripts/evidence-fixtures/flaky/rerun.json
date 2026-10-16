@@ -1,0 +1,27 @@
+{
+  "stats": {
+    "expected": 1,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "specs": [
+        {
+          "title": "AC1 — Signed-in Family A sees the family calendar shell",
+          "ok": true,
+          "tests": [
+            {
+              "results": [
+                {
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

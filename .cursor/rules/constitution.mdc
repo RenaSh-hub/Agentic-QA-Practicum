@@ -60,7 +60,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
 
 ## Agent governance
 
-Behavioral only, not hook-enforced. Applies to every non-trivial task (new spec, heal, refactor, config, multi-file edit). Trivial = a single-line fix with obvious intent.
+Applies to every non-trivial task (new spec, heal, refactor, config, multi-file edit). Trivial = a single-line fix with obvious intent. Red-run heal / heal PR / Jira Bug creates are hook-enforced by `scripts/score-evidence.ts`; the self-assessment is not.
 
 1. Audit — read the ticket, the linked Confluence page, CI logs, and code relevant to the task; list what exists.
 2. Proposal — emit this block before editing and wait for the gate:
@@ -68,13 +68,13 @@ Behavioral only, not hook-enforced. Applies to every non-trivial task (new spec,
 ```
 ## Proposal
 - Scope: files, flows, ticket — what will change and what will not
-- Confidence: 1–10
+- Self-assessment (1–10, not a gate)
 - Rationale: why this approach; evidence consulted
 - Unknowns: gaps, assumptions, or "none"
 ```
 
 3. Edit — only after the gate allows; the smallest diff that satisfies the scope.
 
-Confidence gate: < 5 → stop and ask for the missing input; 5–7 → list unknowns and proceed only after human approval; ≥ 8 → proceed and still cite evidence.
+Actions on red runs are gated by scripts/score-evidence.ts; the self-assessment gates nothing.
 
 Never invent file paths, module names, enum values, repeated UI strings, env var names, credentials, user-facing messages, labels, or API routes. Ask the human or explore the repo or the live app. If `.env.example`, `test-data/`, the ticket, or the live app does not confirm a value, it is an unknown, not a placeholder.

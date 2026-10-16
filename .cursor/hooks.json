@@ -12,6 +12,31 @@
         "matcher": "Write",
         "failClosed": true
       }
+    ],
+    "preToolUse": [
+      {
+        "command": "python3 .cursor/hooks/score_gate.py heal",
+        "matcher": "Write",
+        "failClosed": true
+      },
+      {
+        "command": "python3 .cursor/hooks/score_gate.py approvals",
+        "matcher": "Write",
+        "failClosed": true
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "python3 .cursor/hooks/score_gate.py pr",
+        "matcher": "^gh(\\s|\\.exe\\s+)pr\\s+create\\b",
+        "failClosed": true
+      }
+    ],
+    "beforeMCPExecution": [
+      {
+        "command": "python3 .cursor/hooks/score_gate.py jira",
+        "failClosed": true
+      }
     ]
   }
 }

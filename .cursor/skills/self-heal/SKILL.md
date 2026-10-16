@@ -1,23 +1,24 @@
 ---
 name: self-heal
-description: Repairs drifted Playwright locators after a UI change — patch the POM, re-run unchanged assertions, open a PR. Use when the build is red because a locator broke, fix the drifted selector, the test broke after a UI change, or heal the suite. Use ONLY after triage classifies the red run as a test issue (drift/locator drift); NEVER for a real app bug — route those to bug-reporter instead.
+description: Repairs drifted Playwright locators after a UI change — patch the POM, re-run unchanged assertions, open a PR. Use when the live evidence scorer returns act on side drift (or escalate plus a human approval file). NEVER heal a product bug.
 ---
 
 # Self-heal (locator drift)
 
-Fix **one** broken locator in `pages/` when [ci-failure-triage](../ci-failure-triage/SKILL.md) already classified **test issue (drift)**. Follow [pom-conventions](../pom-conventions/SKILL.md); specs stay read-only.
+Fix **one** broken locator in `pages/` when the live scorer allows heal. Follow [pom-conventions](../pom-conventions/SKILL.md); specs stay read-only.
 
 ## Prerequisite
 
-A completed triage diagnosis classified **test issue (drift)** (run id, classification, trace). Equivalent evidence is acceptable only if it matches ci-failure-triage output.
+Re-run `npx tsx scripts/score-evidence.ts --verify-only .test-artifacts/evidence/current.json`. Trust that stdout only — not a saved decision file, not a triage label in chat.
 
-| Triage outcome | Action |
+| Live scorer | Action |
 | --- | --- |
-| test issue (drift) | Continue this skill |
-| real app bug | **Stop** → [jira-bug-reporter](../jira-bug-reporter/SKILL.md) |
-| missing or ambiguous | **Stop** → complete [ci-failure-triage](../ci-failure-triage/SKILL.md) or ask the human; do not patch |
+| `act` and `side` `drift` | Continue this skill |
+| `escalate` and `.test-artifacts/approvals/<decisionId>.json` exists (human-created) | Continue this skill |
+| `act` and `side` `bug` | **Stop** → [jira-bug-reporter](../jira-bug-reporter/SKILL.md) |
+| `inconclusive` or `escalate` without an approval file | **Stop** → complete [ci-failure-triage](../ci-failure-triage/SKILL.md) or wait for the human; do not patch |
 
-If it is a real app bug, missing, or ambiguous → do not heal.
+If the scorer does not allow drift heal → do not heal.
 
 ## Steps
 
@@ -37,7 +38,7 @@ If it is a real app bug, missing, or ambiguous → do not heal.
 
 **Auth for re-discovery:** Prefer `playwright/.auth/user.json` (main family). If missing or expired, sign in once via the live app using env credentials (same pattern as [explore-and-generate](../explore-and-generate/SKILL.md)). Use `playwright/.auth/alt-user.json` only when the failing spec uses Family B. Match the failing spec’s `storageState` / setup project. Never put credentials in the PR body.
 
-Emit the repo **Proposal** block (constitution) before editing when confidence is below 8.
+Emit the repo **Proposal** block (constitution) before editing. The self-assessment is not a gate; `scripts/score-evidence.ts` is.
 
 ## Stop and escalate
 
@@ -49,7 +50,7 @@ persists after re-discovery, or if a new failure looks like a product regression
 | Need to change `expect()` in `tests/` | Stop — not drift-only; re-triage or bug-reporter |
 | Locator still not found after snapshot-backed fix | Stop — report findings; do not stack speculative POM edits |
 | Test passes but behavior contradicts Jira AC / Confluence | Stop — [jira-bug-reporter](../jira-bug-reporter/SKILL.md) |
-| Classification was ambiguous | Stop — complete [ci-failure-triage](../ci-failure-triage/SKILL.md) first |
+| Scorer is inconclusive or escalate without an approval file | Stop — complete [ci-failure-triage](../ci-failure-triage/SKILL.md) first |
 
 ## Report template
 
@@ -58,7 +59,7 @@ Use in the PR description (and optionally as a PR comment):
 ```markdown
 ## Self-heal — locator drift
 
-**Triage classification:** test issue (drift)  
+**Scorer:** `decision` / `side` / `score` / `rule` (live `score-evidence.ts`)  
 **CI run:** `<run id or local>`  
 **Branch:** `heal/<short-description>`  
 **Failing test:** `<spec>` — `<title>`
@@ -88,7 +89,7 @@ Use in the PR description (and optionally as a PR comment):
 | Fix one role/label/text locator in `pages/` per heal run | Change assertions, timeouts, or tags in `tests/` to go green |
 | Use live `browser_snapshot` on `APP_URL` for the new name/role | Invent labels/names from screenshots or memory |
 | Keep the same user intent (same control, updated accessible name) | Broaden locators (`.*`, drop `{ exact: true }`, extra `.or()`) to mask wrong elements |
-| Triage first; heal only on **drift** classification | Heal when the app is wrong vs AC — file via bug-reporter |
+| Triage first; heal only when the live scorer is act+drift (or escalate + approval file) | Heal when the app is wrong vs AC — file via bug-reporter |
 | Branch `heal/<short-description>`, PR with triage + diff + re-run proof | Merge the PR or skip the re-run |
 | Hand off product wrongness to jira-bug-reporter | Weaken, delete, or comment out `expect()` calls |
 | Use CSS/XPath/`getByTestId` only when no user-facing alternative exists | Default to test ids when role/label/text fits |

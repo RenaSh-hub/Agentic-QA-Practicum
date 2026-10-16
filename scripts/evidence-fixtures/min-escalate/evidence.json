@@ -1,0 +1,43 @@
+{
+  "test": {
+    "file": "tests/calendar.spec.ts",
+    "title": "AC1 — Signed-in Family A sees the family calendar shell"
+  },
+  "items": [
+    {
+      "id": "R1",
+      "kind": "failure",
+      "artifact": "failure.log",
+      "line": 1,
+      "excerpt": "Snapshot mismatch: expected \"Your family calendar\""
+    },
+    {
+      "id": "R2",
+      "kind": "test_location",
+      "artifact": "tests/calendar.spec.ts",
+      "line": 3,
+      "excerpt": "family calendar shell"
+    },
+    {
+      "id": "R3",
+      "kind": "pom_location",
+      "artifact": "pages/calendar.page.ts",
+      "line": 2,
+      "excerpt": "Your family calendar"
+    },
+    {
+      "id": "R4",
+      "kind": "rerun",
+      "artifact": "rerun.txt",
+      "line": 1,
+      "excerpt": "same failing spec"
+    },
+    {
+      "id": "D1",
+      "kind": "snapshot_mismatch",
+      "artifact": "failure.log",
+      "line": 1,
+      "excerpt": "Snapshot mismatch"
+    }
+  ]
+}

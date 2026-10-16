@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "expected": 0,
+    "unexpected": 1,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "specs": [
+        {
+          "title": "AC1 — Signed-in Family A sees the family calendar shell",
+          "ok": false,
+          "tests": [
+            {
+              "results": [
+                {
+                  "status": "failed",
+                  "error": {
+                    "message": "Error: Snapshot mismatch: expected \"Your family calendar\"\nLocator: getByText('Your family calendar')"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
