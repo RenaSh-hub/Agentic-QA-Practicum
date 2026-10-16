@@ -88,6 +88,18 @@ export async function createFamilyApiContext(owner: RecordOwner): Promise<APIReq
   });
 }
 
+/** @see createFamilyApiContext */
+export async function createApiContextForOwner(owner: RecordOwner): Promise<APIRequestContext> {
+  return createFamilyApiContext(owner);
+}
+
+/** Request context with no Bearer token (catalog unauthenticated probes). */
+export async function createUnauthenticatedApiContext(): Promise<APIRequestContext> {
+  return request.newContext({
+    baseURL: requireBaseUrl(),
+  });
+}
+
 /**
  * API context authorized with a Bearer JWT (e.g. after sign-up register).
  * @param bearerToken - JWT from register response or localStorage bt_token
@@ -245,11 +257,25 @@ export async function fetchMe(api: APIRequestContext): Promise<MeResponse> {
  * @param api - Family-authenticated request context
  * @param payload - firstName and birthYear as sent by the live add-child client
  */
+export type CreateChildPayload = {
+  firstName: string;
+  birthYear: number;
+  avatarKey?: string;
+  interests?: string[];
+};
+
 export async function createChild(
   api: APIRequestContext,
-  payload: { firstName: string; birthYear: number },
+  payload: CreateChildPayload,
 ): Promise<CreatedChild> {
-  const response = await api.post(API_CHILDREN, { data: payload });
+  const response = await api.post(API_CHILDREN, {
+    data: {
+      firstName: payload.firstName,
+      birthYear: payload.birthYear,
+      avatarKey: payload.avatarKey ?? 'fox',
+      interests: payload.interests ?? [],
+    },
+  });
   if (!response.ok()) {
     let detail = response.statusText();
     try {
