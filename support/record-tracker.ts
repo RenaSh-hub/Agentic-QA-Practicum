@@ -7,6 +7,7 @@ export type RecordOwner = 'main' | 'alt';
 
 export const TrackedRecordType = {
   Parent: 'parent',
+  Child: 'child',
 } as const;
 
 export type TrackedRecordType = (typeof TrackedRecordType)[keyof typeof TrackedRecordType];

@@ -8,6 +8,8 @@ export class AddChildForm {
   readonly interests: Locator;
   readonly gender: Locator;
   readonly addChildButton: Locator;
+  /** Unnamed `<form>` wrapping add-child; `getByRole('form')` is empty on `/app`. */
+  private readonly form: Locator;
 
   constructor(private readonly page: Page) {
     this.name = page.getByRole('textbox', { name: "Child's first name", exact: true });
@@ -16,16 +18,22 @@ export class AddChildForm {
     this.interests = page.getByRole('textbox', { name: 'Interests (comma-separated)', exact: true });
     this.gender = page.getByRole('combobox', { name: 'Gender', exact: true });
     this.addChildButton = page.getByRole('button', { name: 'Add child', exact: true });
+    this.form = page.locator('form').filter({ has: this.addChildButton });
   }
 
-  /** Returns an avatar button by its accessible name, such as "Fox". */
+  /** Returns an avatar button by its accessible name, such as "Fox", scoped to this form. */
   avatar(name: string): Locator {
-    return this.page.getByRole('button', { name, exact: true });
+    return this.form.getByRole('button', { name, exact: true });
   }
 
-  /** Returns an interest chip by its accessible name, such as "+ LEGO". */
+  /** Returns an interest chip by its accessible name, such as "+ LEGO", scoped to this form. */
   interest(name: string): Locator {
-    return this.page.getByRole('button', { name, exact: true });
+    return this.form.getByRole('button', { name, exact: true });
+  }
+
+  /** Activates an interest chip such as "+ LEGO". */
+  async addInterest(name: string): Promise<void> {
+    await this.interest(name).click();
   }
 
   /** Fills the child's name and birth year. */
