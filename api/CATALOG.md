@@ -1,0 +1,31 @@
+# BuddyTime API catalog (live discovery)
+
+Captured **2026-10-16** with Playwright Chromium, main-family `storageState` (`playwright/.auth/user.json`) and `Authorization: Bearer` from localStorage `bt_token` (same as `createFamilyApiContext` in `support/api-client.ts`). Routes visited: `AppRoute` Dashboard (`/app`), Friends, Communities, Availability, Playdates, Birthdays, Profile. Read-only browsing except **one add-child + remove-child** on Dashboard. Static assets, fonts, images, analytics, and Next.js payloads (`/_next/*`, `?_rsc=`) were ignored.
+
+| method | path (ids → `{id}`) | page that called it | how it's authenticated | status seen | request body fields (writes) | response top-level fields and types | safe for tests? | evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| GET | `/api/v1/me` | Dashboard, Friends, Communities, Availability, Playdates, Birthdays, Profile (and during add/remove child) | Authorization: Bearer (`bt_token`) | 200 | — | `parent`: object (`id`, `email`, `name`, `displayName`, `phone` null\|string, `emailVerified` boolean); `family`: object (`id`, `name`, `addressText` null\|string, `addressVisibility` string, `tz` string, `parents` array, `children` array of child objects); `isAdmin` boolean. Child: `id`, `firstName`, `birthYear`, `birthMonth`, `age`, `gender`, `interests` array, `avatarKey` | yes | executed |
+| GET | `/api/v1/connections` | Same pages as `/api/v1/me` | Authorization: Bearer (`bt_token`) | 200 | — | array; item: `id` string, `family` object (`id`, `name`), `children` array, `communities` array, `since` string, `status` string, `blockedByMe` boolean | yes | executed |
+| GET | `/api/v1/availability` | Availability; also observed on initial Dashboard load | Authorization: Bearer (`bt_token`) | 200 | — | `rules` array (item: `id`, `childId` null\|string, `weekday` number, `startMin`, `endMin`, `hosting` string, `noticeHours` number); `exceptions` array (item: `id`, `date` string, `kind` string, `startMin`, `endMin`, `note` string) | yes | executed |
+| GET | `/api/v1/communities` | Communities; Dashboard; Birthdays | Authorization: Bearer (`bt_token`) | 200 | — | array; item: `id`, `name`, `type`, `description`, `myRole`, `myStatus`, `familiesCount`, `pendingCount`, `createdAt` | yes | executed |
+| GET | `/api/v1/communities/{id}` | Birthdays | Authorization: Bearer (`bt_token`) | 200 | — | community fields as list item plus `members` array (item: `id`, `family` object, `role`, `status`, `children` array, `connection` null\|object, `since` string) | yes | executed |
+| GET | `/api/v1/events` | Birthdays | Authorization: Bearer (`bt_token`) | 200 | — | array; item: `id`, `kind`, `title`, `childId`/`childName`/`endsAt`/`communityId`/`communityName` nullable, `startsAt`, `venueText`, `details`, `cardKey`, `status`, `rsvpToken`, `counts` object (`yes`, `no`, `maybe`, `guestsComing` numbers), `createdAt`, `canManage` boolean | yes | executed |
+| GET | `/api/v1/matches` | Playdates | Authorization: Bearer (`bt_token`) | 200 | — | array; item: `date`, `startMin`, `endMin`, `startsAt`, `endsAt`, `family` object (`id`, `name`), `suggestedHost` null\|object, `locationKind` string | yes | executed |
+| GET | `/api/v1/playdates` | Playdates; Dashboard | Authorization: Bearer (`bt_token`) | 200 | — | array; item: `id`, `status`, `startsAt`, `endsAt`, `locationKind`, `locationText` null\|string, `notes`, `proposerFamily`/`inviteeFamily`/`otherFamily`/`hostFamily` objects, `children` array, `proposedBy` object, `respondedAt`, `cancelledAt`, `googleCalendarUrl`, `icsUrl`, `canRespond`, `canCancel` booleans | yes | executed |
+| POST | `/api/v1/children` | Dashboard (add child) | Authorization: Bearer (`bt_token`) | 201 | `firstName` (string), `birthYear` (number), `avatarKey` (string, e.g. `"fox"`), `interests` (array of strings; UI sent `[]`) | created child: `id`, `firstName`, `birthYear`, `birthMonth` null\|number, `age`, `gender` null\|string, `interests` array, `avatarKey` | yes (undo via `DELETE /api/v1/children/{id}`) | executed |
+| DELETE | `/api/v1/children/{id}` | Dashboard (remove child) | Authorization: Bearer (`bt_token`) | 204 | — (no body) | empty body (204 No Content) | yes (cleanup for created children) | executed |
+| POST | `/api/v1/auth/register` | — (not invoked this session) | Bearer after register (per test harness); exact login/register client headers not captured here | — | `password` and other register fields referenced in `support/api-client.ts` / cleanup skill | `parent`, `token` (per `parseRegisterResponse`) | no (no undo observed in this catalog pass) | inspected only |
+| DELETE | `/api/v1/me` | — (not invoked this session) | Authorization: Bearer + JSON body | — | `password` (string confirmation) | not captured | no (destructive; only used in controlled teardown) | inspected only |
+
+## Not yet tested
+
+- **Pagination / filtering** — `GET /api/v1/events` returned a large single array (~275 items) with no `page`, `cursor`, or `limit` query params observed on these page loads.
+- **Error response shape** — no 4xx/5xx API responses were intentionally triggered; unknown whether errors are `{ message }`, `{ error }`, field-level validation arrays, etc.
+- **Rate limits** — not exercised.
+- **Expired or invalid JWT** — not probed; without `Authorization`, catalog GETs return **401** (API contract tests, 2026-10-16).
+- **Sign-in API** — login route/path not seen (auth reused from storage state).
+- **Write APIs not hit on these pages** — availability rule/exception create/update/delete; connection invite/accept/block; community create/join/approve; playdate propose/respond/cancel; event create/RSVP; profile or family PATCH; child update (avatar editor opens UI only — no save clicked); push/install endpoints tied to dashboard buttons.
+- **Partial POST `/api/v1/children`** — optional fields (`birthMonth`, `gender`, non-empty `interests`) not captured in the UI submit used for cataloging.
+- **Idempotency / concurrency** — duplicate DELETE or double POST not tried.
+
+Raw capture (paths, statuses, samples): `.test-artifacts/api-catalog-raw.json` (local only; not for CI).
