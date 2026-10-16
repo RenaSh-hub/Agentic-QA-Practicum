@@ -47,6 +47,36 @@ Diagnose red CI or local Playwright runs without merging fixes. Name **where** a
 
 Routing after this skill uses the **scorer decision**, not the labels in this table. **act + bug** → [jira-bug-reporter](../jira-bug-reporter/SKILL.md) (draft only; do not file Jira without that workflow's gate). **act + drift** → [self-heal](../self-heal/SKILL.md).
 
+## Evidence rubric
+
+Machine-readable weights and kinds: [`config/evidence-rubric.json`](../../../config/evidence-rubric.json).  
+Practice examples: [`scripts/evidence-fixtures/`](../../../scripts/evidence-fixtures/).  
+Scorer thresholds: **act** ≥ 60, **escalate** ≥ 35 (same side only; mixed drift+bug → inconclusive).
+
+Write each item in the evidence JSON as `{ "id", "kind", "artifact", "line", "excerpt" }`. Never include `score`, `confidence`, or `weight`.
+
+| Item | Side | Weight | Oracle | Evidence |
+| --- | --- | ---: | --- | --- |
+| R1 failure | required | — | — | Failing test + first error line, from the Playwright JSON report or a CI log |
+| R2 test_location | required | — | — | `tests/` file:line of the failing step |
+| R3 pom_location | required for drift | — | — | `pages/` file:line of the locator |
+| R4 rerun | required | — | — | Re-run executed by the scorer; same error = verified; passed = flaky |
+| D1 snapshot_mismatch | drift | 40 | yes | Live accessibility snapshot shows the control under a different name or role than the locator |
+| D4 probe_unique | drift | 25 | yes | The candidate locator matches exactly one element in a probe run |
+| D2 pom_changed | drift | 20 | no | git diff shows the locator line changed |
+| D3 locator_error | drift | 15 | no | The error is a locator-resolution failure |
+| B1 ac_contradiction | bug | 40 | yes | Feature-file AC line vs the observed value in the error |
+| B2 server_error | bug | 25 | no | 5xx or console error at the failing step, from the trace |
+| B3 control_present | bug | 20 | yes | Snapshot shows the expected control, but the outcome is wrong |
+| B4 second_context | bug | 15 | no | Reproduces for the second family or another browser |
+| N oracle_neutral | — | 0 | no | An oracle ran and couldn't decide |
+
+**R3:** required when any drift-side weighted item (D*) is present; bug-only paths may omit R3 if no POM drift is claimed (see `min-act-bug` fixture).
+
+**R4:** save JSON re-run at `.test-artifacts/reruns/<decisionId>.json` where `decisionId` is the first 12 hex chars of sha256(evidence file). Pass on re-run → inconclusive (rule 3), not drift.
+
+For agent eval cases (`evals/triage/answer-key.json`), map **act + side** to `drift`/`bug`; map **escalate**, **inconclusive**, conflicts, and flaky R4 to **`ambiguous`** — see [`evals/README.md`](../../../evals/README.md).
+
 ## Report template
 
 Post this (markdown) on the PR or return to the parent agent:

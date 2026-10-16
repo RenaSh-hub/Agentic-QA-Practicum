@@ -1,0 +1,47 @@
+{
+  "model": "composer-2.5-fast",
+  "startedAt": "2026-10-16T03:06:00.000Z",
+  "finishedAt": "2026-10-16T03:13:00.000Z",
+  "predictions": [
+    {
+      "id": "fixture-min-act-drift",
+      "predicted": "drift",
+      "evidence": "Fixture artifacts + score-evidence: act drift 60; D1 snapshot mismatch and D2 pom_changed with stable rerun."
+    },
+    {
+      "id": "fixture-min-act-bug",
+      "predicted": "bug",
+      "evidence": "Feature AC vs snapshot; scorer act bug 60 with B1 ac_contradiction and B3 control_present."
+    },
+    {
+      "id": "fixture-min-escalate",
+      "predicted": "ambiguous",
+      "evidence": "Scorer decision escalate (score 40); insufficient to self-heal or file — human review."
+    },
+    {
+      "id": "fixture-missing-required",
+      "predicted": "ambiguous",
+      "evidence": "Scorer missing R4; cannot verify repro — inconclusive."
+    },
+    {
+      "id": "fixture-contradiction",
+      "predicted": "ambiguous",
+      "evidence": "Conflicting D1 drift and B2 server_error; scorer rule 4 inconclusive."
+    },
+    {
+      "id": "fixture-neutral-oracle",
+      "predicted": "ambiguous",
+      "evidence": "Escalate with oracle_neutral N; no confident drift/bug routing."
+    },
+    {
+      "id": "fixture-flaky",
+      "predicted": "ambiguous",
+      "evidence": "Re-run JSON pass → scorer rule 3; treat as flaky not drift."
+    },
+    {
+      "id": "fixture-model-score",
+      "predicted": "ambiguous",
+      "evidence": "Invalid evidence shape triggers rule 1 inconclusive."
+    }
+  ]
+}
