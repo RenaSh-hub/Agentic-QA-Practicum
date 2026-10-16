@@ -15,6 +15,7 @@ export class HeaderComponent {
   readonly profile: Locator;
   readonly admin: Locator;
   readonly goPremium: Locator;
+  readonly premiumComingSoonStatus: Locator;
   readonly menu: Locator;
   readonly notifications: Locator;
   readonly logOut: Locator;
@@ -39,6 +40,9 @@ export class HeaderComponent {
     this.profile = this.navigation.getByRole('link', { name: 'My Profile', exact: true });
     this.admin = this.navigation.getByRole('link', { name: 'Admin', exact: true });
     this.goPremium = page.getByRole('complementary').getByRole('button', { name: 'Go Premium' });
+    this.premiumComingSoonStatus = page
+      .getByRole('status')
+      .filter({ hasText: 'Premium — coming soon! ✨' });
     this.menu = this.banner.getByRole('button', { name: 'Menu', exact: true });
     this.notifications = this.banner.getByRole('button', { name: 'Notifications', exact: true });
     this.logOut = this.banner.getByRole('button', { name: 'Log out', exact: true });
