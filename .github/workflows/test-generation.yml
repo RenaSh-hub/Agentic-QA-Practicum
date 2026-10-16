@@ -1,12 +1,12 @@
 name: Test generation
 
 on:
-  schedule:
-    - cron: '0 14 * * 1-5'
-    - cron: '37 11 * * *'
-      timezone: America/New_York
-    - cron: '22 14 * * *'
-      timezone: America/New_York
+  # schedule:
+  #   - cron: '0 14 * * 1-5'
+  #   - cron: '37 11 * * *'
+  #     timezone: America/New_York
+  #   - cron: '22 14 * * *'
+  #     timezone: America/New_York
   workflow_dispatch:
 
 concurrency:
