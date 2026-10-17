@@ -1,0 +1,47 @@
+{
+  "model": "composer-2.5-fast",
+  "startedAt": "2026-10-16T03:14:00.000Z",
+  "finishedAt": "2026-10-16T03:21:00.000Z",
+  "predictions": [
+    {
+      "id": "fixture-min-act-drift",
+      "predicted": "drift",
+      "evidence": "act+drift; heal path; verified weighted drift items reach 60."
+    },
+    {
+      "id": "fixture-min-act-bug",
+      "predicted": "bug",
+      "evidence": "act+bug; AC contradiction with control present in snapshot."
+    },
+    {
+      "id": "fixture-min-escalate",
+      "predicted": "ambiguous",
+      "evidence": "escalate not act; side drift ignored per locked oracle policy."
+    },
+    {
+      "id": "fixture-missing-required",
+      "predicted": "ambiguous",
+      "evidence": "inconclusive missing R4."
+    },
+    {
+      "id": "fixture-contradiction",
+      "predicted": "ambiguous",
+      "evidence": "inconclusive contradiction D1/B2."
+    },
+    {
+      "id": "fixture-neutral-oracle",
+      "predicted": "ambiguous",
+      "evidence": "escalate rule 7; oracle false."
+    },
+    {
+      "id": "fixture-flaky",
+      "predicted": "ambiguous",
+      "evidence": "inconclusive rule 3 flaky rerun."
+    },
+    {
+      "id": "fixture-model-score",
+      "predicted": "ambiguous",
+      "evidence": "inconclusive rule 1 forbidden fields."
+    }
+  ]
+}
