@@ -33,8 +33,9 @@ Read `support/record-tracker.ts` and `support/api-client.ts` before adding rows 
 | type | create request | delete request | owner |
 | ---- | -------------- | -------------- | ----- |
 | `parent` (`TrackedRecordType.Parent`) | `POST /api/v1/auth/register` → `201` with `parent.id` in body (UI: auto-tracked by `cleanup.fixture.ts`; otherwise: `trackRecord` after create) | `DELETE /api/v1/me` via `deleteParentAccount` — Bearer + sidecar password when registered in-test; else family API context + `APP_USER_PASSWORD` / `APP_ALT_USER_PASSWORD` for `owner` (`204` success) | `main` or `alt` |
+| `child` (`TrackedRecordType.Child`) | `POST /api/v1/children` → `201` with `id` in body (API: `trackRecord` after create; UI add-child submit is out of scope for AQPBT-5) | `DELETE /api/v1/children/{id}` via `deleteChild` — family API context for `owner` (`204` success) | `main` or `alt` |
 
-**No other `TrackedRecordType` values exist on `main` yet.** When you add children, availability, playdates, invites, etc., extend `record-tracker`, add delete helpers in `api-client`, update `cleanup-records.ts`, **and** this table in the same change.
+When you add availability, playdates, invites, etc., extend `record-tracker`, add delete helpers in `api-client`, update `cleanup-records.ts`, **and** this table in the same change.
 
 Paths: `API_AUTH_REGISTER`, `API_ME` in `support/api.constants.ts`.
 
