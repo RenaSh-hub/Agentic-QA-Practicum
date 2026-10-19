@@ -1,0 +1,123 @@
+---
+description: Conventions for API tests in api/ — sources of truth, safe auth, a success and an intentional error test per endpoint, evidence labels.
+globs: api/**
+alwaysApply: false
+---
+
+# API test conventions
+
+Specs live under `api/` and follow `api/CATALOG.md`. Shared pieces: `api/fixtures.ts`, `api/helpers/catalog-response.ts`, `support/api.constants.ts`, `support/api-client.ts`.
+
+**Documented** = spec or approved doc. **Observed** = catalog row after you capture traffic (add or update the row). Anything else → **Not yet tested** in `api/CATALOG.md`. Observed rows → characterization tests; a given formal spec → contract tests.
+
+## 1. Sources of truth
+
+✅ **Good** — executed catalog row; spec pins that row via shared helpers (`api/me.api.spec.ts`):
+
+```typescript
+const body = await readCatalogGetJson(await mainApi.get(API_ME));
+assertMeBody(body);
+```
+
+❌ **Bad** — treat **inspected only** / no undo as ready for a write spec, or mislabel observed probes as “contract” from a spec:
+
+```markdown
+| POST | `/api/v1/auth/register` | … | no (no undo observed in this catalog pass) | inspected only |
+```
+
+Also: catalog **Not yet tested** says no 4xx were triggered, yet 401 without `Authorization` was observed (`CATALOG_UNAUTHENTICATED_STATUS`) — that is characterization, not a spec contract. Do not invent error JSON shape until observed.
+
+## 2. Requests
+
+`baseURL` from Playwright config (`APP_URL` via `support/api-client.ts`). Use **`mainApi`**, **`altApi`**, **`guestApi`** from `api/fixtures.ts` only. No Bearer token, origin URL, or resource id literals in specs.
+
+✅ **Good** — path constants + id from a prior response (`api/communities.api.spec.ts`):
+
+```typescript
+await mainApi.get(API_COMMUNITIES);
+await mainApi.get(apiCommunityPath(firstId));
+await guestApi.get(API_ME);
+```
+
+❌ **Bad** — paste catalog capture mechanics into a spec:
+
+```markdown
+Authorization: Bearer (`bt_token`) from localStorage, storageState `playwright/.auth/user.json`
+```
+
+## 3. Two tests per endpoint
+
+Per route: one **success** test (status, JSON, catalog fields via `readCatalogGetJson` / `assert*`) and one **intentional error** test that changes exactly one thing (drop auth, omit a required field, empty body). Assert status; assert body shape on errors only when observed. On success, assert catalog fields — not unbounded sensitive dumps.
+
+✅ **Good** — paired success + missing token (`api/me.api.spec.ts`, `api/availability.api.spec.ts`):
+
+```typescript
+test('GET /api/v1/me without token returns 401', { tag: '@api' }, async ({ guestApi }) => {
+  expect((await guestApi.get(API_ME)).status()).toBe(CATALOG_UNAUTHENTICATED_STATUS);
+});
+```
+
+❌ **Bad** — `POST /api/v1/children`: one happy path, no sibling that only drops the token / sends invalid or empty body (`api/children.api.spec.ts`):
+
+```typescript
+test('POST /api/v1/children create appears on GET /api/v1/me then DELETE removes child', { tag: '@api' }, async ({
+  mainApi,
+}) => { /* createChild, GET /me, deleteChild — no separate error test for POST */ });
+```
+
+## 4. Writes
+
+Only when undo is **documented** or **observed** in the catalog (e.g. `DELETE /api/v1/children/{id}`). Call **`trackRecord`** immediately after create so cleanup runs if the test fails.
+
+✅ **Good** — `api/children.api.spec.ts` after `createChild`:
+
+```typescript
+trackRecord({ type: TrackedRecordType.Child, id: created.id, owner: 'main' });
+```
+
+Use `catalogChildPayload()`, not inline ids.
+
+❌ **Bad** — catalog says no safe test without undo — do not POST in specs until the row allows it (same register row as §1).
+
+## 5. Tags
+
+Exactly one tag per `test()`: **`@api`**. Never on `describe()`.
+
+✅ **Good** — every spec under `api/` (`api/connections.api.spec.ts`):
+
+```typescript
+test('GET /api/v1/connections returns catalog status, JSON, and item shape', { tag: '@api' }, async ({
+  mainApi,
+}) => { /* … */ });
+```
+
+❌ **Bad** — omit the tag (not present in `api/` today; do not add tests this way):
+
+```typescript
+test('POST /api/v1/children create appears on GET /api/v1/me then DELETE removes child', async ({
+  mainApi,
+}) => { /* … */ });
+```
+
+When splitting flows into multiple tests, each keeps `{ tag: '@api' }` alone — no `@smoke` / `@e2e`, no tag on `describe()`.
+
+## 6. Evidence
+
+Label every claim **executed**, **inspected only**, or **not yet tested** (catalog `evidence` column and § Not yet tested). Status codes and field lists from a PDF, chat, or agent guess are not evidence until observed.
+
+✅ **Good** — constant tied to catalog probes (`api/helpers/catalog-response.ts`):
+
+```typescript
+/** Status observed without `Authorization` on catalog GET probes (2026-10-16). */
+export const CATALOG_UNAUTHENTICATED_STATUS = 401;
+```
+
+Plus executed row, e.g. `GET /api/v1/me` → `executed` in `api/CATALOG.md`, asserted in `me.api.spec.ts`.
+
+❌ **Bad** — assert harness types from an **inspected only** row, not an executed body:
+
+```markdown
+| POST | `/api/v1/auth/register` | … | `parent`, `token` (per `parseRegisterResponse`) | inspected only |
+```
+
+Do not fill **Not yet tested** (error JSON shape, expired JWT, sign-in path) from prediction.
