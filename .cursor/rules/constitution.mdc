@@ -57,6 +57,7 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
   - `self-heal` — drift POM patch
   - `test-data-reset` — manual tracker purge
 - Agents:
+  - `api-test-writer` — catalog/spec to api/*.api.spec.ts
   - `bug-reporter` — file confirmed bugs
   - `test-writer` — plan to spec
   - `triage` — diagnose red runs
