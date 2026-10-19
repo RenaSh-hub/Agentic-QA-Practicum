@@ -44,6 +44,8 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
 
 - Skills:
   - `api-cleanup` — record teardown
+  - `api-contract-tests` — catalog/spec to api/*.api.spec.ts
+  - `api-discovery` — traffic to CATALOG.md
   - `ci-failure-triage` — classify failures
   - `eval-report` — suite metrics refresh
   - `exploratory-charter` — session charter template
