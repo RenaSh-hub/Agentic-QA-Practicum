@@ -4,7 +4,7 @@ alwaysApply: true
 ---
 
 Non-negotiables for every task. Details and examples: playwright-conventions.mdc
-(tests) and qa-orchestrator.mdc (ticket/CI workflow).
+(tests), api-conventions.mdc (API tests), and qa-orchestrator.mdc (ticket/CI workflow).
 
 ## MUST
 
@@ -40,8 +40,11 @@ Non-negotiables for every task. Details and examples: playwright-conventions.mdc
 
 ## Index
 
-Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as each artifact is added.
+Skills (`.cursor/skills/`), Agents (`.cursor/agents/`), and Rules (`.cursor/rules/`): extend these lists as each artifact is added.
 
+- Rules:
+  - `qa-orchestrator.mdc` — ticket/CI routing (API vs page vs both)
+  - `api-conventions.mdc` — `api/` spec conventions
 - Skills:
   - `api-cleanup` — record teardown
   - `api-contract-tests` — catalog/spec to api/*.api.spec.ts
@@ -65,6 +68,19 @@ Skills (`.cursor/skills/`) and Agents (`.cursor/agents/`): extend these lists as
 ## Agent governance
 
 Applies to every non-trivial task (new spec, heal, refactor, config, multi-file edit). Trivial = a single-line fix with obvious intent. Red-run heal / heal PR / Jira Bug creates are hook-enforced by `scripts/score-evidence.ts`; the self-assessment is not.
+
+## Gates
+
+| Control | Enforcement |
+| --- | --- |
+| Red-run heal (`pages/` drift) | Hook — `score_gate.py` heal + live `scripts/score-evidence.ts`; requires **act + drift** |
+| Red-run Jira bug create | Hook — `score_gate.py` jira + live scorer; requires **act + bug** |
+| Escalate approval file (`.test-artifacts/approvals/`) | Hook — `score_gate.py` approvals |
+| PR create (`gh pr create`) | Hook — `score_gate.py` pr |
+| Weakened assertions in `tests/` | Hook — `guard-test-assertions.sh` |
+| Constitution violations in `tests/` / `pages/` | Hook — `guard-constitution.sh` |
+| Proposal / self-assessment (1–10) | Prompt only — not a gate |
+| **api-test-writer** write only under `api/` | Prompt only — not a hook |
 
 1. Audit — read the ticket, the linked Confluence page, CI logs, and code relevant to the task; list what exists.
 2. Proposal — emit this block before editing and wait for the gate:

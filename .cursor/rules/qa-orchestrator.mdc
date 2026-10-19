@@ -34,13 +34,15 @@ Drive a QA task to **done** by delegating. The only work you do yourself is read
 - Atlassian MCP (Jira and Confluence)
 - GitHub MCP or `gh`
 - Terminal (`npx playwright test`)
-- Subagents: **test-writer**, **triage**, **bug-reporter**
+- Subagents: **api-test-writer**, **test-writer**, **triage**, **bug-reporter**
 
 ## Skills
 
 | Skill | When |
 | ----- | ---- |
 | `jira-ticket-analyzer` | Analyze ticket → plan |
+| `api-discovery` | Undocumented API → `api/CATALOG.md` |
+| `api-contract-tests` | Spec or catalog → API test plan |
 | `explore-and-generate` | Ticket-less discovery |
 | `ci-failure-triage` | Via **triage** on red runs |
 | `self-heal` | Drift only |
@@ -51,13 +53,50 @@ Drive a QA task to **done** by delegating. The only work you do yourself is read
 
 ## Routing
 
-**With ticket:** analyze → plan saved to `features/<key>.feature.md` → **test-writer** → run → if red, **Heal on red**.
+After analyze, route from acceptance criteria (or discovery output):
 
-**No ticket:** `explore-and-generate` → plan saved to `features/explore-<slug>.feature.md` → **test-writer**.
+| AC shape | Plan | Delegate | Run |
+| --- | --- | --- | --- |
+| API endpoint only (no page in AC) | `api-contract-tests` from spec or catalog | **api-test-writer** | `npx playwright test --project=api` |
+| Page flow | Gherkin saved to `features/<key>.feature.md` or `features/explore-<slug>.feature.md` | **test-writer** | UI suite (as today) |
+| Both | API plan first, then page plan | **api-test-writer** then **test-writer** | API project, then UI suite |
+
+**With ticket:** `jira-ticket-analyzer` → route per table → run → if red, **Heal on red**.
+
+**No ticket:** `explore-and-generate` → route per table (page plan path uses `features/explore-<slug>.feature.md`).
+
+## Index
+
+API path artifacts this rule delegates to (full catalog in `constitution.mdc` **Index**):
+
+- Rules:
+  - `api-conventions.mdc` — `api/` spec conventions
+- Skills:
+  - `api-discovery` — traffic to `CATALOG.md`
+  - `api-contract-tests` — catalog/spec to `api/*.api.spec.ts`
+- Agents:
+  - `api-test-writer` — catalog/spec to `api/*.api.spec.ts`
+
+## Gates
+
+Re-printed from `constitution.mdc` — enforcement is unchanged.
+
+| Control | Enforcement |
+| --- | --- |
+| Red-run heal (`pages/` drift) | Hook — `score_gate.py` heal + live `scripts/score-evidence.ts`; requires **act + drift** |
+| Red-run Jira bug create | Hook — `score_gate.py` jira + live scorer; requires **act + bug** |
+| Escalate approval file (`.test-artifacts/approvals/`) | Hook — `score_gate.py` approvals |
+| PR create (`gh pr create`) | Hook — `score_gate.py` pr |
+| Weakened assertions in `tests/` | Hook — `guard-test-assertions.sh` |
+| Constitution violations in `tests/` / `pages/` | Hook — `guard-constitution.sh` |
+| Proposal / self-assessment (1–10) | Prompt only — not a gate |
+| **api-test-writer** write only under `api/` | Prompt only — not a hook |
 
 ## Heal on red
 
-Always **triage** first (write evidence, run `npx tsx scripts/score-evidence.ts --verify-only .test-artifacts/evidence/current.json`). Route on that live decision — not a chat label, not a saved decision file.
+Always **triage** first (write evidence, run `npx tsx scripts/score-evidence.ts --verify-only .test-artifacts/evidence/current.json`). Route on that live decision — not a chat label, not a saved decision file. P36's evidence score applies to **API** failures too.
+
+An API failure has no page object to heal, so the drift side cannot reach **act** — a changed status or field goes to **triage** as evidence for a contract change or a bug, never to **self-heal**.
 
 | Decision | Action |
 | -------------- | ------ |
@@ -72,7 +111,7 @@ Always **triage** first (write evidence, run `npx tsx scripts/score-evidence.ts 
 
 The outer runner (Cursor Automation, headless `agent -p`, or local batch) queries Jira project `JIRA_PROJECT_KEY` (`AQPBT`) for status **In QA** without label `tests-generated` and passes **at most one** ticket per run. Empty queue → no run.
 
-Per ticket: analyze → **test-writer** → run → heal on red.
+Per ticket: analyze → route per **Routing** → run → heal on red.
 
 **Output:** one PR per ticket, ticket linked in PR body, label `tests-generated` on the ticket. Never merge, transition, or close.
 
