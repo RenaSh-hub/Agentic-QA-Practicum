@@ -1,6 +1,7 @@
 import {
   createBearerApiContext,
   createFamilyApiContext,
+  deleteChild,
   deleteParentAccount,
   type CleanupResult,
 } from './api-client';
@@ -59,6 +60,15 @@ async function deleteTrackedRecord(record: TrackedRecord): Promise<CleanupResult
         };
       }
       return await deleteParentAccount(api, password, record.id);
+    } finally {
+      await api.dispose();
+    }
+  }
+
+  if (record.type === TrackedRecordType.Child) {
+    const api = await createFamilyApiContext(record.owner);
+    try {
+      return await deleteChild(api, record.id);
     } finally {
       await api.dispose();
     }

@@ -12,7 +12,8 @@ export class DashboardPage {
   readonly heading: Locator;
   readonly findPlaydate: Locator;
   readonly changeAvatar: Locator;
-  readonly removeChild: Locator;
+  readonly myKids: Locator;
+  readonly removeButtons: Locator;
   readonly viewAllPlaydates: Locator;
   readonly inviteFamily: Locator;
   readonly inviteCoParent: Locator;
@@ -28,7 +29,8 @@ export class DashboardPage {
     this.heading = page.getByRole('heading', { level: 2 });
     this.findPlaydate = page.getByRole('link', { name: 'Find a Playdate', exact: true });
     this.changeAvatar = page.getByRole('button', { name: 'Change avatar', exact: true });
-    this.removeChild = page.getByRole('button', { name: 'remove', exact: true });
+    this.myKids = page.getByText('My Kids', { exact: true });
+    this.removeButtons = page.getByRole('button', { name: 'remove', exact: true });
     this.viewAllPlaydates = page.getByRole('link', { name: 'View all', exact: true });
     this.inviteFamily = page.getByRole('button', { name: '+ Invite a family', exact: true });
     this.inviteCoParent = page.getByRole('button', { name: 'Invite co-parent', exact: true });
@@ -41,6 +43,24 @@ export class DashboardPage {
   /** Opens the dashboard. */
   async goto(): Promise<void> {
     await this.page.goto(AppRoute.Dashboard);
+  }
+
+  /** My Kids stat whose numeric count matches `count` (e.g. `2My Kids`). */
+  myKidsCount(count: number): Locator {
+    return this.page.getByText(new RegExp(`^${count}\\s*My Kids$`));
+  }
+
+  /** Child summary line `{name}, {age}` or `{name}, {age} · {Boy|Girl}`. */
+  childSummary(summary: string): Locator {
+    return this.page.getByText(summary, { exact: true });
+  }
+
+  /**
+   * Activates **remove** for the child at `index` (listed order).
+   * @param index - 0-based child row index from GET /api/v1/me
+   */
+  async removeChild(index: number): Promise<void> {
+    await this.removeButtons.nth(index).click();
   }
 
   /** Reveals the circle invite link. */
