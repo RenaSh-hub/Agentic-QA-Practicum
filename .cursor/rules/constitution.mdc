@@ -62,6 +62,7 @@ Skills (`.cursor/skills/`), Agents (`.cursor/agents/`), and Rules (`.cursor/rule
   - `test-data-reset` — manual tracker purge
 - Agents:
   - `api-test-writer` — catalog/spec to api/*.api.spec.ts
+  - `authz-adversary` — cross-family and anonymous access probes; report only
   - `bug-reporter` — file confirmed bugs
   - `test-writer` — plan to spec
   - `triage` — diagnose red runs

@@ -1,0 +1,100 @@
+[
+  {
+    "endpoint": "GET /api/v1/me",
+    "who": "alt",
+    "status": 200,
+    "outcome": "HELD",
+    "evidence": "200; child id absent; family A's family id absent; owner follow-up still lists the child; family B follow-up does not"
+  },
+  {
+    "endpoint": "GET /api/v1/me",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "GET /api/v1/communities/{id}",
+    "who": "alt",
+    "status": 404,
+    "outcome": "undocumented",
+    "evidence": "404; child id absent; family A's family id absent; owner follow-up still lists the child; catalog does not define this cross-family status"
+  },
+  {
+    "endpoint": "GET /api/v1/communities/{id}",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "GET /api/v1/connections",
+    "who": "alt",
+    "status": 200,
+    "outcome": "undocumented",
+    "evidence": "200; child id absent; family A's family id absent; owner follow-up still lists the child; catalog does not define cross-family access"
+  },
+  {
+    "endpoint": "GET /api/v1/connections",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "GET /api/v1/availability",
+    "who": "alt",
+    "status": 200,
+    "outcome": "undocumented",
+    "evidence": "200; child id absent; family A's family id absent; owner follow-up still lists the child; catalog does not define cross-family access"
+  },
+  {
+    "endpoint": "GET /api/v1/availability",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "GET /api/v1/events",
+    "who": "alt",
+    "status": 200,
+    "outcome": "undocumented",
+    "evidence": "200; child id absent; family A's family id absent; owner follow-up still lists the child; catalog does not define cross-family access"
+  },
+  {
+    "endpoint": "GET /api/v1/events",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "GET /api/v1/playdates",
+    "who": "alt",
+    "status": 200,
+    "outcome": "undocumented",
+    "evidence": "200; child id absent; family A's family id absent; owner follow-up still lists the child; catalog does not define cross-family access"
+  },
+  {
+    "endpoint": "GET /api/v1/playdates",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  },
+  {
+    "endpoint": "DELETE /api/v1/children/{id}",
+    "who": "alt",
+    "status": 404,
+    "outcome": "HELD",
+    "evidence": "404; catalog message Child not found; child id absent; owner follow-up still lists the child; family B follow-up does not"
+  },
+  {
+    "endpoint": "DELETE /api/v1/children/{id}",
+    "who": "anonymous",
+    "status": 401,
+    "outcome": "HELD",
+    "evidence": "401; catalog message Unauthorized; child id absent; owner follow-up still lists the child"
+  }
+]

@@ -1,0 +1,122 @@
+{
+  "ownerBaselineListsChild": true,
+  "hadCommunityId": true,
+  "ownerFollowUpListsChild": true,
+  "altFollowUpListsChild": false,
+  "stoppedOn5xx": false,
+  "requestsSent": 19,
+  "attempts": [
+    {
+      "endpoint": "GET /api/v1/me",
+      "who": "alt",
+      "status": 200,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/me",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "GET /api/v1/communities/{id}",
+      "who": "alt",
+      "status": 404,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/communities/{id}",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "GET /api/v1/connections",
+      "who": "alt",
+      "status": 200,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/connections",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "GET /api/v1/availability",
+      "who": "alt",
+      "status": 200,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/availability",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "GET /api/v1/events",
+      "who": "alt",
+      "status": 200,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/events",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "GET /api/v1/playdates",
+      "who": "alt",
+      "status": 200,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": null
+    },
+    {
+      "endpoint": "GET /api/v1/playdates",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    },
+    {
+      "endpoint": "DELETE /api/v1/children/{id}",
+      "who": "alt",
+      "status": 404,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "child-not-found"
+    },
+    {
+      "endpoint": "DELETE /api/v1/children/{id}",
+      "who": "anonymous",
+      "status": 401,
+      "childIdPresent": false,
+      "familyIdPresent": false,
+      "catalogMessage": "unauthorized"
+    }
+  ]
+}

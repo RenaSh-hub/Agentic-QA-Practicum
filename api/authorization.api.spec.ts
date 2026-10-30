@@ -1,6 +1,6 @@
 import { test, expect, trackRecord } from './fixtures';
 import { createChild } from '../support/api-client';
-import { API_ME, apiChildPath } from '../support/api.constants';
+import { API_COMMUNITIES, API_ME, apiChildPath, apiCommunityPath } from '../support/api.constants';
 import { TrackedRecordType } from '../support/record-tracker';
 import { catalogChildPayload } from '../test-data/factories/child.factory';
 import { isRecord, readCatalogGetJson } from './helpers/catalog-response';
@@ -37,6 +37,29 @@ test('DELETE /api/v1/children/{id} without a token returns 401 and the child sta
   trackRecord({ type: TrackedRecordType.Child, id: created.id, owner: 'main' });
 
   const denied = await guestApi.delete(apiChildPath(created.id));
+  expect(denied.status()).toBe(401);
+
+  const mainMe = await readCatalogGetJson(await mainApi.get(API_ME));
+  expect(meListsChild(mainMe, created.id)).toBe(true);
+});
+
+test('GET /api/v1/communities/{id} without a token returns 401 and the child stays on GET /api/v1/me', { tag: '@api' }, async ({
+  mainApi,
+  guestApi,
+}) => {
+  const created = await createChild(mainApi, catalogChildPayload());
+  trackRecord({ type: TrackedRecordType.Child, id: created.id, owner: 'main' });
+
+  const communities = await readCatalogGetJson(await mainApi.get(API_COMMUNITIES));
+  if (!Array.isArray(communities) || communities.length === 0) {
+    return;
+  }
+  const first = communities[0];
+  if (!isRecord(first) || typeof first.id !== 'string') {
+    return;
+  }
+
+  const denied = await guestApi.get(apiCommunityPath(first.id));
   expect(denied.status()).toBe(401);
 
   const mainMe = await readCatalogGetJson(await mainApi.get(API_ME));
