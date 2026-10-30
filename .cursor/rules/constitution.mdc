@@ -49,6 +49,7 @@ Skills (`.cursor/skills/`), Agents (`.cursor/agents/`), and Rules (`.cursor/rule
   - `api-cleanup` — record teardown
   - `api-contract-tests` — catalog/spec to api/*.api.spec.ts
   - `api-discovery` — traffic to CATALOG.md
+  - `api-test-design` — catalog to `api/test-design/<area>.md`
   - `ci-failure-triage` — classify failures
   - `eval-report` — suite metrics refresh
   - `exploratory-charter` — session charter template
