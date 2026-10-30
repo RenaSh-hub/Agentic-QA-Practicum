@@ -149,7 +149,7 @@ Accept: text/calendar
 ```http
 GET /api/v1/communities/<MAIN_COMMUNITY_ID> HTTP/1.1
 Host: <APP_URL host>
-Authorization: Bearer <APP_TOKEN_ALT>
+Authorization: Bearer <APP_TOKEN>
 Accept: application/json
 ```
 
