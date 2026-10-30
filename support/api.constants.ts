@@ -15,3 +15,8 @@ export const API_PLAYDATES = '/api/v1/playdates';
 export function apiCommunityPath(id: string): string {
   return `${API_COMMUNITIES}/${id}`;
 }
+
+/** Child resource: `/api/v1/children/{id}`. */
+export function apiChildPath(id: string): string {
+  return `${API_CHILDREN}/${id}`;
+}

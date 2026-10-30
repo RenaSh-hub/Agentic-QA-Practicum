@@ -22,12 +22,27 @@ Captured **2026-10-16** with Playwright Chromium, main-family `storageState` (`p
 
 - **Pagination / filtering** — `GET /api/v1/events` returned a large single array (~275 items) with no `page`, `cursor`, or `limit` query params observed on Calendar or other page loads; `GET /api/v1/playdates?filter=upcoming` observed on Calendar only (other `filter` values not exercised).
 - **Calendar logged-out** — `/calendar` without a session redirects to login in UI tests; API calls on that path were not captured in the 2026-10-18 pass.
-- **Error response shape** — no 4xx/5xx API responses were intentionally triggered; unknown whether errors are `{ message }`, `{ error }`, field-level validation arrays, etc.
+- **Error response shape** — validation errors and other 4xx/5xx bodies are still unknown. The two refused `DELETE /api/v1/children/{id}` calls below are the exception; see **Authorization (two families)**.
 - **Rate limits** — not exercised.
-- **Expired or invalid JWT** — not probed; without `Authorization`, catalog GETs return **401** (API contract tests, 2026-10-16).
+- **Expired or invalid JWT** — not probed; without `Authorization`, catalog GETs return **401** (API contract tests, 2026-10-16) and `DELETE /api/v1/children/{id}` returns **401** (authorization spec, 2026-10-30).
 - **Sign-in API** — login route/path not seen (auth reused from storage state).
 - **Write APIs not hit on these pages** — availability rule/exception create/update/delete; connection invite/accept/block; community create/join/approve; playdate propose/respond/cancel; event create/RSVP; profile or family PATCH; child update (avatar editor opens UI only — no save clicked); push/install endpoints tied to dashboard buttons.
 - **Partial POST `/api/v1/children`** — optional fields (`birthMonth`, `gender`, non-empty `interests`) not captured in the UI submit used for cataloging.
 - **Idempotency / concurrency** — duplicate DELETE or double POST not tried.
+
+## Authorization (two families)
+
+Executed **2026-10-30** by `api/authorization.api.spec.ts`. Family A (`mainApi`) created a disposable child and called `trackRecord` immediately. Statuses below are from that run, before they were written into the spec. No child ids are stored here.
+
+- **executed** — Family B (`altApi`, Bearer token for the alt family) `DELETE /api/v1/children/{id}` on Family A's child returned **404**. Body: `message` `"Child not found"`, `error` `"Not Found"`, `statusCode` `404`. After that, `GET /api/v1/me` as Family A still listed the child, and `GET /api/v1/me` as Family B did not (both GETs **200**, same shape as the catalog row).
+- **executed** — The same DELETE with no token (`guestApi`) returned **401**. Body: `message` `"Unauthorized"`, `statusCode` `401` (`error` was absent). The child was still listed on Family A's `GET /api/v1/me` (**200**).
+
+Still **not yet tested**:
+
+- Owning-family DELETE of an id that was never created, so this **404** is not compared with a genuinely missing child.
+- A wrong or expired JWT on this DELETE (only a missing token was sent).
+- **403** on this route — this run did not return one.
+- Family B creating, updating, or reading Family A's child by any route other than this DELETE, and the same cross-family check on other resources.
+- Error JSON for validation failures and for endpoints other than these two DELETEs.
 
 Raw capture (paths, statuses, samples): `.test-artifacts/api-catalog-raw.json` (local only; not for CI).
